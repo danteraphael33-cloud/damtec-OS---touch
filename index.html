@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordem de Serviço Damtec</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Light blue background */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative; /* Necessário para o pseudo-elemento */
+        }
+
+        /* Estilo para a imagem de fundo como marca d'água */
+        body::before {
+            content: '';
+            position: fixed; /* Fixa a imagem no fundo da tela */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.imgur.com/2w5x3KD.png'); /* Sua imagem de fundo da Damtec */
+            background-repeat: no-repeat; /* Não repetir a imagem */
+            background-position: center center; /* Centralizar a imagem */
+            background-size: cover; /* Cobrir todo o fundo */
+            opacity: 0.15; /* Aumentado para ser mais visível na impressão */
+            z-index: -1; /* Garante que a imagem fique atrás do conteúdo */
+            background-attachment: fixed; /* Adicionado para melhor compatibilidade de impressão */
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            position: relative; /* Para garantir que o container fique acima da marca d'água */
+            z-index: 1;
+        }
+
+        /* Estilos específicos para impressão */
+        @media print {
+            body {
+                background-color: white !important; /* Garante fundo branco na impressão */
+                opacity: 1 !important; /* Garante que o conteúdo do body seja totalmente opaco */
+                margin: 0;
+                padding: 0;
+            }
+            body::before {
+                opacity: 0.15 !important; /* Mantém a opacidade da marca d'água na impressão */
+                background-attachment: fixed !important; /* Garante que a propriedade seja mantida na impressão */
+            }
+            .no-print {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .footer-watermark {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 150px; /* Ajuste o tamanho conforme necessário */
+                height: auto;
+                opacity: 0.1; /* Efeito de marca d'água */
+                z-index: -1; /* Garante que fique atrás do conteúdo */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Damtec Logo -->
+        <header class="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
+            <img src="https://i.imgur.com/Z4r5gYI.jpeg" alt="Damtec Logo" class="h-24 rounded-lg">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Ordem de Serviço</h1>
+                <div class="mt-2">
+                    <label for="orderNumber" class="block text-sm font-medium text-gray-700 mb-1">Número da Ordem</label>
+                    <input type="text" id="orderNumber" name="orderNumber" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+        </header>
+
+        <!-- O.S. Form -->
+        <form id="osForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Client Data -->
+                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-blue-700 mb-4">Dados do Cliente</h2>
+                    <div>
+                        <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">Nome da Empresa</label>
+                        <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="Condominio Zyz by Kallas Centro">
+                    </div>
+                    <div class="mt-4">
+                        <label for="clientName" class="block text-sm font-medium text-gray-700 mb-1">Nome / Função</label>
+                        <select id="clientName" name="clientName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecione um nome/função</option>
+                            <option value="Fabio Santiago">Fabio Santiago</option>
+                            <option value="Rodrigo">Rodrigo</option>
+                            <option value="Ivonete">Ivonete</option>
+                            <option value="Gyovanne">Gyovanne</option>
+                            <option value="Bruno">Bruno</option>
+                            <option value="Ariane">Ariane</option>
+                        </select>
+                    </div>
+                    <div class="mt-4">
+                        <label for="clientDoc" class="block text-sm font-medium text-gray-700 mb-1">CPF/CNPJ</label>
+                        <input type="text" id="clientDoc" name="clientDoc" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="mt-4">
+                        <label for="clientAddress" class="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
+                        <input type="text" id="clientAddress" name="clientAddress" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="Rua Florencio de Abreu 978 , Centro - SP">
+                    </div>
+                    <!-- Telefone e Email removidos -->
+                </div>
+
+                <!-- Service Information -->
+                <div class="p-4 bg-yellow-50 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-yellow-700 mb-4">Informações do Serviço</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="requesterName" class="block text-sm font-medium text-gray-700 mb-1">Nome do Solicitante</label>
+                            <select id="requesterName" name="requesterName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500">
+                                <option value="">Selecione um nome</option>
+                                <option value="Fabio Santiago">Fabio Santiago</option>
+                                <option value="Rodrigo">Rodrigo</option>
+                                <option value="Ivonete">Ivonete</option>
+                                <option value="Gyovanne">Gyovanne</option>
+                                <option value="Bruno">Bruno</option>
+                                <option value="Ariane">Ariane</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="osDate" class="block text-sm font-medium text-gray-700 mb-1">Data de Atendimento da O.S.</label>
+                            <input type="date" id="osDate" name="osDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500" value="<?php echo date('Y-m-d'); ?>">
+                        </div>
+                        <div>
+                            <label for="responsibleTech" class="block text-sm font-medium text-gray-700 mb-1">Técnico Responsável</label>
+                            <input type="text" id="responsibleTech" name="responsibleTech" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500" value="Dante Reis">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="serviceDescription" class="block text-sm font-medium text-gray-700 mb-1">Descrição do Serviço</label>
+                        <textarea id="serviceDescription" name="serviceDescription" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <label for="solutionFound" class="block text-sm font-medium text-gray-700 mb-1">Solução</label>
+                        <textarea id="solutionFound" name="solutionFound" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <label for="partsUsed" class="block text-sm font-medium text-gray-700 mb-1">Material Utilizado</label>
+                        <textarea id="partsUsed" name="partsUsed" rows="3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500"></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <label for="hoursWorked" class="block text-sm font-medium text-gray-700 mb-1">Horas Trabalhadas</label>
+                        <input type="number" id="hoursWorked" name="hoursWorked" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signature Section -->
+            <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold text-indigo-700 mb-4">Assinatura do Cliente</h2>
+                <canvas id="signatureCanvas" class="border border-gray-300 rounded-md bg-white w-full h-40"></canvas>
+                <button type="button" id="clearSignature" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out no-print">
+                    Limpar Assinatura
+                </button>
+            </div>
+
+            <!-- Photo Upload Section -->
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Upload de Fotos</h2>
+                <input type="file" id="photoUpload" multiple accept="image/*" class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100 no-print">
+                <div id="photoPreviews" class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Image previews will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Print Button -->
+            <div class="flex justify-center mt-8 no-print">
+                <button type="button" id="printButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    Imprimir / Salvar como PDF
+                </button>
+            </div>
+        </form>
+
+        <!-- Footer Watermark for Print -->
+        <img src="https://placehold.co/150x50/ADD8E6/000000?text=DAMTEC+LOGO" alt="Damtec Logo Watermark" class="footer-watermark hidden">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const photoUpload = document.getElementById('photoUpload');
+            const photoPreviews = document.getElementById('photoPreviews');
+            const printButton = document.getElementById('printButton');
+            const osDateInput = document.getElementById('osDate');
+            const footerWatermark = document.querySelector('.footer-watermark');
+
+            // Set current date for OS Date input
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months start at 0!
+            const dd = String(today.getDate()).padStart(2, '0');
+            osDateInput.value = `${yyyy}-${mm}-${dd}`;
+
+            // --- Signature Canvas Logic ---
+            const signatureCanvas = document.getElementById('signatureCanvas');
+            const signatureCtx = signatureCanvas.getContext('2d');
+            const clearSignatureBtn = document.getElementById('clearSignature');
+
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+
+            // Set canvas dimensions based on its CSS width/height
+            // This is important for drawing resolution
+            const resizeCanvas = () => {
+                const rect = signatureCanvas.getBoundingClientRect();
+                signatureCanvas.width = rect.width;
+                signatureCanvas.height = rect.height;
+                signatureCtx.lineWidth = 2;
+                signatureCtx.lineCap = 'round';
+                signatureCtx.strokeStyle = '#000'; // Black color for signature
+            };
+
+            // Initial resize and on window resize
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            function draw(e) {
+                if (!isDrawing) return;
+
+                let clientX, clientY;
+                if (e.touches) { // Touch event
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else { // Mouse event
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+
+                const rect = signatureCanvas.getBoundingClientRect();
+                const currentX = clientX - rect.left;
+                const currentY = clientY - rect.top;
+
+                signatureCtx.beginPath();
+                signatureCtx.moveTo(lastX, lastY);
+                signatureCtx.lineTo(currentX, currentY);
+                signatureCtx.stroke();
+
+                lastX = currentX;
+                lastY = currentY;
+            }
+
+            function startDrawing(e) {
+                isDrawing = true;
+                let clientX, clientY;
+                if (e.touches) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                }
+                const rect = signatureCanvas.getBoundingClientRect();
+                lastX = clientX - rect.left;
+                lastY = clientY - rect.top;
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+            }
+
+            function clearSignature() {
+                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+            }
+
+            // Mouse events for signature canvas
+            signatureCanvas.addEventListener('mousedown', startDrawing);
+            signatureCanvas.addEventListener('mousemove', draw);
+            signatureCanvas.addEventListener('mouseup', stopDrawing);
+            signatureCanvas.addEventListener('mouseout', stopDrawing); // Stop drawing if mouse leaves canvas
+
+            // Touch events for signature canvas
+            signatureCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling when drawing
+                startDrawing(e);
+            });
+            signatureCanvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // Prevent scrolling when drawing
+                draw(e);
+            });
+            signatureCanvas.addEventListener('touchend', stopDrawing);
+            signatureCanvas.addEventListener('touchcancel', stopDrawing); // For when touch is interrupted
+
+            clearSignatureBtn.addEventListener('click', clearSignature);
+            // --- End Signature Canvas Logic ---
+
+
+            photoUpload.addEventListener('change', (event) => {
+                photoPreviews.innerHTML = ''; // Clear previous previews
+                const files = event.target.files;
+                if (files) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const imgContainer = document.createElement('div');
+                                imgContainer.className = 'relative group';
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.alt = 'Preview da foto';
+                                img.className = 'w-full h-32 object-cover rounded-lg shadow-md';
+
+                                // Add a caption input for each image
+                                const captionInput = document.createElement('input');
+                                captionInput.type = 'text';
+                                captionInput.placeholder = 'Legenda da foto (opcional)';
+                                captionInput.className = 'mt-2 block w-full p-1 text-sm border border-gray-300 rounded-md';
+
+                                imgContainer.appendChild(img);
+                                imgContainer.appendChild(captionInput);
+                                photoPreviews.appendChild(imgContainer);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+
+            printButton.addEventListener('click', () => {
+                // Show watermark only for print
+                footerWatermark.classList.remove('hidden');
+                window.print();
+                // Hide watermark after print dialog is closed
+                setTimeout(() => {
+                    footerWatermark.classList.add('hidden');
+                }, 1000); // Small delay to ensure print dialog appears first
+            });
+
+            // Prevent form submission
+            document.getElementById('osForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
